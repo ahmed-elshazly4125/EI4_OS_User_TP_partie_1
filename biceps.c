@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <readline/readline.h>
 
 static char **Mots;
@@ -138,6 +139,7 @@ int execComInt(void)
 int execComExt(void)
 {
     pid_t pid;
+    int status;
 
     pid = fork();
 
@@ -152,6 +154,7 @@ int execComExt(void)
         exit(EXIT_FAILURE);
     }
 
+    waitpid(pid, &status, 0);
     return 0;
 }
 
