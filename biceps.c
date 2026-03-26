@@ -104,9 +104,26 @@ int Sortie(int N, char **P)
     exit(0);
 }
 
+int Pwd(int N, char **P)
+{
+    char chemin[PATH_MAX];
+
+    (void)N;
+    (void)P;
+
+    if (getcwd(chemin, sizeof(chemin)) == NULL) {
+        perror("getcwd");
+        return 1;
+    }
+
+    printf("%s\n", chemin);
+    return 0;
+}
+
 void majComInt(void)
 {
     ajouteCom("exit", Sortie);
+    ajouteCom("pwd", Pwd);
 }
 
 int execComInt(void)
