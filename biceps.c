@@ -120,10 +120,33 @@ int Pwd(int N, char **P)
     return 0;
 }
 
+int Cd(int N, char **P)
+{
+    char *destination;
+
+    if (N < 2) {
+        destination = getenv("HOME");
+        if (destination == NULL) {
+            fprintf(stderr, "cd: HOME non defini\n");
+            return 1;
+        }
+    } else {
+        destination = P[1];
+    }
+
+    if (chdir(destination) != 0) {
+        perror("cd");
+        return 1;
+    }
+
+    return 0;
+}
+
 void majComInt(void)
 {
     ajouteCom("exit", Sortie);
     ajouteCom("pwd", Pwd);
+    ajouteCom("cd", Cd);
 }
 
 int execComInt(void)
