@@ -8,6 +8,22 @@
 static char **Mots;
 static int NMots;
 
+char *copyString(char *s)
+{
+    char *copie;
+    size_t taille;
+
+    taille = strlen(s) + 1;
+    copie = malloc(taille);
+    if (copie == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    strcpy(copie, s);
+    return copie;
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
