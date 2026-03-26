@@ -154,7 +154,11 @@ int execComExt(void)
         exit(EXIT_FAILURE);
     }
 
-    waitpid(pid, &status, 0);
+    if (waitpid(pid, &status, 0) < 0) {
+        perror("waitpid");
+        return -1;
+    }
+
     return 0;
 }
 
