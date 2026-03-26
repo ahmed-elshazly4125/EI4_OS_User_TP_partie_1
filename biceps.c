@@ -116,8 +116,10 @@ int main(void)
             break;
         }
 
-        analyseCom(ligne);
-        printf("Commande saisie : [%s]\n", ligne);
+        if (analyseCom(ligne)) {
+            printf("Commande saisie : [%s]\n", ligne);
+        }
+
         free(ligne);
     }
 
