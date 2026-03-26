@@ -134,6 +134,11 @@ int execComInt(void)
     return 0;
 }
 
+int execComExt(void)
+{
+    return 0;
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
