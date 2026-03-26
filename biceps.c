@@ -139,6 +139,10 @@ int main(void)
 
         if (analyseCom(ligne)) {
             printf("Commande : %s\n", Mots[0]);
+
+            if (NMots > 1) {
+                printf("Parametre 1 : %s\n", Mots[1]);
+            }
         }
 
         free(ligne);
