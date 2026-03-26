@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <limits.h>
 #include <readline/readline.h>
 
 char *fabrique_prompt(void)
 {
     char *user;
+    char hostname[HOST_NAME_MAX + 1];
     char *prompt;
     size_t taille;
 
@@ -14,14 +17,19 @@ char *fabrique_prompt(void)
         user = "user";
     }
 
-    taille = strlen(user) + 3;
+    if (gethostname(hostname, sizeof(hostname)) != 0) {
+        strcpy(hostname, "machine");
+    }
+    hostname[sizeof(hostname) - 1] = '\0';
+
+    taille = strlen(user) + strlen(hostname) + 4;
     prompt = malloc(taille);
     if (prompt == NULL) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
 
-    snprintf(prompt, taille, "%s$ ", user);
+    snprintf(prompt, taille, "%s@%s$ ", user, hostname);
     return prompt;
 }
 
