@@ -154,6 +154,10 @@ int main(void)
             if (NMots > 1) {
                 printf("Parametre 1 : %s\n", Mots[1]);
             }
+
+            if (NMots > 2) {
+                printf("Parametre 2 : %s\n", Mots[2]);
+            }
         }
 
         free(ligne);
