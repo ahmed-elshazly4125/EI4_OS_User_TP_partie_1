@@ -173,7 +173,6 @@ int main(void)
 {
     char *ligne;
     char *prompt;
-    int i;
 
     Mots = NULL;
     NMots = 0;
@@ -192,10 +191,8 @@ int main(void)
         }
 
         if (analyseCom(ligne)) {
-            printf("Commande : %s\n", Mots[0]);
-
-            for (i = 1; i < NMots; i++) {
-                printf("Parametre %d : %s\n", i, Mots[i]);
+            if (!execComInt()) {
+                printf("Commande : %s\n", Mots[0]);
             }
         }
 
