@@ -196,7 +196,7 @@ int main(void)
 
         if (analyseCom(ligne)) {
             if (!execComInt()) {
-                printf("Commande : %s\n", Mots[0]);
+                execComExt();
             }
         }
 
