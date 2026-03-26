@@ -42,53 +42,28 @@ int analyseCom(char *b)
     char *travail;
     char *courant;
     char *mot;
+    char **nouveau;
 
     libereAnalyse();
 
     travail = copyString(b);
     courant = travail;
 
-    mot = strsep(&courant, " \t\n");
+    while ((mot = strsep(&courant, " \t\n")) != NULL) {
+        if (*mot == '\0') {
+            continue;
+        }
 
-    while (mot != NULL && *mot == '\0') {
-        mot = strsep(&courant, " \t\n");
-    }
+        nouveau = realloc(Mots, (NMots + 1) * sizeof(char *));
+        if (nouveau == NULL) {
+            perror("realloc");
+            free(travail);
+            exit(EXIT_FAILURE);
+        }
 
-    if (mot == NULL) {
-        free(travail);
-        return 0;
-    }
-
-    Mots = malloc(3 * sizeof(char *));
-    if (Mots == NULL) {
-        perror("malloc");
-        free(travail);
-        exit(EXIT_FAILURE);
-    }
-
-    Mots[0] = copyString(mot);
-    NMots = 1;
-
-    mot = strsep(&courant, " \t\n");
-
-    while (mot != NULL && *mot == '\0') {
-        mot = strsep(&courant, " \t\n");
-    }
-
-    if (mot != NULL) {
-        Mots[1] = copyString(mot);
-        NMots = 2;
-    }
-
-    mot = strsep(&courant, " \t\n");
-
-    while (mot != NULL && *mot == '\0') {
-        mot = strsep(&courant, " \t\n");
-    }
-
-    if (mot != NULL) {
-        Mots[2] = copyString(mot);
-        NMots = 3;
+        Mots = nouveau;
+        Mots[NMots] = copyString(mot);
+        NMots++;
     }
 
     free(travail);
@@ -149,14 +124,12 @@ int main(void)
         }
 
         if (analyseCom(ligne)) {
+            int i;
+
             printf("Commande : %s\n", Mots[0]);
 
-            if (NMots > 1) {
-                printf("Parametre 1 : %s\n", Mots[1]);
-            }
-
-            if (NMots > 2) {
-                printf("Parametre 2 : %s\n", Mots[2]);
+            for (i = 1; i < NMots; i++) {
+                printf("Parametre %d : %s\n", i, Mots[i]);
             }
         }
 
