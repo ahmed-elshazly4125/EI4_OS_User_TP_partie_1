@@ -10,6 +10,7 @@ char *fabrique_prompt(void)
     char *user;
     char hostname[HOST_NAME_MAX + 1];
     char *prompt;
+    char fin_prompt;
     size_t taille;
 
     user = getenv("USER");
@@ -22,6 +23,12 @@ char *fabrique_prompt(void)
     }
     hostname[sizeof(hostname) - 1] = '\0';
 
+    if (geteuid() == 0) {
+        fin_prompt = '#';
+    } else {
+        fin_prompt = '$';
+    }
+
     taille = strlen(user) + strlen(hostname) + 4;
     prompt = malloc(taille);
     if (prompt == NULL) {
@@ -29,7 +36,7 @@ char *fabrique_prompt(void)
         exit(EXIT_FAILURE);
     }
 
-    snprintf(prompt, taille, "%s@%s$ ", user, hostname);
+    snprintf(prompt, taille, "%s@%s%c ", user, hostname, fin_prompt);
     return prompt;
 }
 
