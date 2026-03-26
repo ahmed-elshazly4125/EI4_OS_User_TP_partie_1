@@ -59,7 +59,7 @@ int analyseCom(char *b)
         return 0;
     }
 
-    Mots = malloc(2 * sizeof(char *));
+    Mots = malloc(3 * sizeof(char *));
     if (Mots == NULL) {
         perror("malloc");
         free(travail);
@@ -78,6 +78,17 @@ int analyseCom(char *b)
     if (mot != NULL) {
         Mots[1] = copyString(mot);
         NMots = 2;
+    }
+
+    mot = strsep(&courant, " \t\n");
+
+    while (mot != NULL && *mot == '\0') {
+        mot = strsep(&courant, " \t\n");
+    }
+
+    if (mot != NULL) {
+        Mots[2] = copyString(mot);
+        NMots = 3;
     }
 
     free(travail);
