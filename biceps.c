@@ -5,6 +5,9 @@
 #include <limits.h>
 #include <readline/readline.h>
 
+static char **Mots;
+static int NMots;
+
 char *fabrique_prompt(void)
 {
     char *user;
@@ -44,6 +47,9 @@ int main(void)
 {
     char *ligne;
     char *prompt;
+
+    Mots = NULL;
+    NMots = 0;
 
     while (1) {
         prompt = fabrique_prompt();
