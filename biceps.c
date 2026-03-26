@@ -40,6 +40,7 @@ void libereAnalyse(void)
 int analyseCom(char *b)
 {
     (void)b;
+    libereAnalyse();
     return 0;
 }
 
