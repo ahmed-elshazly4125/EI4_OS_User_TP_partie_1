@@ -50,17 +50,16 @@ int analyseCom(char *b)
 
     mot = strsep(&courant, " \t\n");
 
+    while (mot != NULL && *mot == '\0') {
+        mot = strsep(&courant, " \t\n");
+    }
+
     if (mot == NULL) {
         free(travail);
         return 0;
     }
 
-    if (*mot == '\0') {
-        free(travail);
-        return 0;
-    }
-
-    Mots = malloc(sizeof(char *));
+    Mots = malloc(2 * sizeof(char *));
     if (Mots == NULL) {
         perror("malloc");
         free(travail);
@@ -69,6 +68,17 @@ int analyseCom(char *b)
 
     Mots[0] = copyString(mot);
     NMots = 1;
+
+    mot = strsep(&courant, " \t\n");
+
+    while (mot != NULL && *mot == '\0') {
+        mot = strsep(&courant, " \t\n");
+    }
+
+    if (mot != NULL) {
+        Mots[1] = copyString(mot);
+        NMots = 2;
+    }
 
     free(travail);
     return NMots;
