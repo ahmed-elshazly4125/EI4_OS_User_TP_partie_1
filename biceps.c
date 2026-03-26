@@ -50,17 +50,28 @@ int analyseCom(char *b)
 
     mot = strsep(&courant, " \t\n");
 
-    free(travail);
-
     if (mot == NULL) {
+        free(travail);
         return 0;
     }
 
     if (*mot == '\0') {
+        free(travail);
         return 0;
     }
 
-    return 1;
+    Mots = malloc(sizeof(char *));
+    if (Mots == NULL) {
+        perror("malloc");
+        free(travail);
+        exit(EXIT_FAILURE);
+    }
+
+    Mots[0] = copyString(mot);
+    NMots = 1;
+
+    free(travail);
+    return NMots;
 }
 
 char *fabrique_prompt(void)
