@@ -54,7 +54,7 @@ int analyseCom(char *b)
             continue;
         }
 
-        nouveau = realloc(Mots, (NMots + 1) * sizeof(char *));
+        nouveau = realloc(Mots, (NMots + 2) * sizeof(char *));
         if (nouveau == NULL) {
             perror("realloc");
             free(travail);
@@ -64,6 +64,7 @@ int analyseCom(char *b)
         Mots = nouveau;
         Mots[NMots] = copyString(mot);
         NMots++;
+        Mots[NMots] = NULL;
     }
 
     free(travail);
@@ -109,6 +110,7 @@ int main(void)
 {
     char *ligne;
     char *prompt;
+    int i;
 
     Mots = NULL;
     NMots = 0;
@@ -124,8 +126,6 @@ int main(void)
         }
 
         if (analyseCom(ligne)) {
-            int i;
-
             printf("Commande : %s\n", Mots[0]);
 
             for (i = 1; i < NMots; i++) {
