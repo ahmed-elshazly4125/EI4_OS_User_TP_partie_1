@@ -107,6 +107,15 @@ void majComInt(void)
     ajouteCom("exit", Sortie);
 }
 
+void listeComInt(void)
+{
+    int i;
+
+    for (i = 0; i < NbComInt; i++) {
+        printf("Commande interne %d : %s\n", i + 1, TabComInt[i].nom);
+    }
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
@@ -152,6 +161,7 @@ int main(void)
     NMots = 0;
     NbComInt = 0;
     majComInt();
+    listeComInt();
 
     while (1) {
         prompt = fabrique_prompt();
