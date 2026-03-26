@@ -128,7 +128,7 @@ int main(void)
         }
 
         if (analyseCom(ligne)) {
-            printf("Commande saisie : [%s]\n", ligne);
+            printf("Commande : %s\n", Mots[0]);
         }
 
         free(ligne);
