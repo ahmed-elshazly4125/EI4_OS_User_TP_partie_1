@@ -24,6 +24,19 @@ char *copyString(char *s)
     return copie;
 }
 
+void libereAnalyse(void)
+{
+    int i;
+
+    for (i = 0; i < NMots; i++) {
+        free(Mots[i]);
+    }
+
+    free(Mots);
+    Mots = NULL;
+    NMots = 0;
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
@@ -81,5 +94,6 @@ int main(void)
         free(ligne);
     }
 
+    libereAnalyse();
     return 0;
 }
