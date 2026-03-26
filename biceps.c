@@ -95,6 +95,18 @@ void ajouteCom(char *nom, TypeCommande fonction)
     NbComInt++;
 }
 
+int Sortie(int N, char **P)
+{
+    (void)N;
+    (void)P;
+    exit(0);
+}
+
+void majComInt(void)
+{
+    ajouteCom("exit", Sortie);
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
@@ -139,6 +151,7 @@ int main(void)
     Mots = NULL;
     NMots = 0;
     NbComInt = 0;
+    majComInt();
 
     while (1) {
         prompt = fabrique_prompt();
