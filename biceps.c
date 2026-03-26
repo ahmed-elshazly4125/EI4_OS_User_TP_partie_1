@@ -39,8 +39,13 @@ void libereAnalyse(void)
 
 int analyseCom(char *b)
 {
-    (void)b;
+    char *travail;
+
     libereAnalyse();
+
+    travail = copyString(b);
+    free(travail);
+
     return 0;
 }
 
