@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
+#include <sys/types.h>
 #include <readline/readline.h>
 
 static char **Mots;
@@ -136,6 +137,19 @@ int execComInt(void)
 
 int execComExt(void)
 {
+    pid_t pid;
+
+    pid = fork();
+
+    if (pid < 0) {
+        perror("fork");
+        return -1;
+    }
+
+    if (pid == 0) {
+        exit(0);
+    }
+
     return 0;
 }
 
