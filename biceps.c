@@ -41,13 +41,15 @@ int analyseCom(char *b)
 {
     char *travail;
     char *courant;
+    char *mot;
 
     libereAnalyse();
 
     travail = copyString(b);
     courant = travail;
 
-    (void)courant;
+    mot = strsep(&courant, " \t\n");
+    (void)mot;
 
     free(travail);
 
