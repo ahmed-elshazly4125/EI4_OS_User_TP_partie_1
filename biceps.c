@@ -37,6 +37,12 @@ void libereAnalyse(void)
     NMots = 0;
 }
 
+int analyseCom(char *b)
+{
+    (void)b;
+    return 0;
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
