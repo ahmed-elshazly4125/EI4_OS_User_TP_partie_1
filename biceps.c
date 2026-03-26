@@ -83,6 +83,18 @@ int analyseCom(char *b)
     return NMots;
 }
 
+void ajouteCom(char *nom, TypeCommande fonction)
+{
+    if (NbComInt >= NBMAXC) {
+        fprintf(stderr, "Trop de commandes internes\n");
+        exit(EXIT_FAILURE);
+    }
+
+    TabComInt[NbComInt].nom = nom;
+    TabComInt[NbComInt].fonction = fonction;
+    NbComInt++;
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
