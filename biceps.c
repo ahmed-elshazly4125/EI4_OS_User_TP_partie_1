@@ -40,10 +40,15 @@ void libereAnalyse(void)
 int analyseCom(char *b)
 {
     char *travail;
+    char *courant;
 
     libereAnalyse();
 
     travail = copyString(b);
+    courant = travail;
+
+    (void)courant;
+
     free(travail);
 
     return 0;
