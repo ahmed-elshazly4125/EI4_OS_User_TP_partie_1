@@ -147,7 +147,9 @@ int execComExt(void)
     }
 
     if (pid == 0) {
-        exit(0);
+        execvp(Mots[0], Mots);
+        perror(Mots[0]);
+        exit(EXIT_FAILURE);
     }
 
     return 0;
