@@ -49,11 +49,18 @@ int analyseCom(char *b)
     courant = travail;
 
     mot = strsep(&courant, " \t\n");
-    (void)mot;
 
     free(travail);
 
-    return 0;
+    if (mot == NULL) {
+        return 0;
+    }
+
+    if (*mot == '\0') {
+        return 0;
+    }
+
+    return 1;
 }
 
 char *fabrique_prompt(void)
