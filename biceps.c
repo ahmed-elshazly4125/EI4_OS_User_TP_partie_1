@@ -178,7 +178,6 @@ int main(void)
     NMots = 0;
     NbComInt = 0;
     majComInt();
-    listeComInt();
 
     while (1) {
         prompt = fabrique_prompt();
