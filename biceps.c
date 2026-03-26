@@ -116,6 +116,24 @@ void listeComInt(void)
     }
 }
 
+int execComInt(void)
+{
+    int i;
+
+    if (NMots == 0) {
+        return 0;
+    }
+
+    for (i = 0; i < NbComInt; i++) {
+        if (strcmp(Mots[0], TabComInt[i].nom) == 0) {
+            TabComInt[i].fonction(NMots, Mots);
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 char *fabrique_prompt(void)
 {
     char *user;
