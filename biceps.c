@@ -8,6 +8,18 @@
 static char **Mots;
 static int NMots;
 
+#define NBMAXC 10
+
+typedef int (*TypeCommande)(int, char **);
+
+typedef struct {
+    char *nom;
+    TypeCommande fonction;
+} CommandeInterne;
+
+static CommandeInterne TabComInt[NBMAXC];
+static int NbComInt;
+
 char *copyString(char *s)
 {
     char *copie;
@@ -114,6 +126,7 @@ int main(void)
 
     Mots = NULL;
     NMots = 0;
+    NbComInt = 0;
 
     while (1) {
         prompt = fabrique_prompt();
