@@ -109,15 +109,6 @@ void majComInt(void)
     ajouteCom("exit", Sortie);
 }
 
-void listeComInt(void)
-{
-    int i;
-
-    for (i = 0; i < NbComInt; i++) {
-        printf("Commande interne %d : %s\n", i + 1, TabComInt[i].nom);
-    }
-}
-
 int execComInt(void)
 {
     int i;
