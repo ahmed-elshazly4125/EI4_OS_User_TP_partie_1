@@ -142,11 +142,21 @@ int Cd(int N, char **P)
     return 0;
 }
 
+int Vers(int N, char **P)
+{
+    (void)N;
+    (void)P;
+
+    printf("biceps version 1.0\n");
+    return 0;
+}
+
 void majComInt(void)
 {
     ajouteCom("exit", Sortie);
     ajouteCom("pwd", Pwd);
     ajouteCom("cd", Cd);
+    ajouteCom("vers", Vers);
 }
 
 int execComInt(void)
