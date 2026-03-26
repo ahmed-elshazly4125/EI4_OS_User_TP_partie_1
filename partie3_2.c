@@ -1,0 +1,222 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <limits.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <readline/readline.h>
+
+static char **Mots;
+static int NMots;
+
+#define NBMAXC 10
+
+typedef int (*TypeCommande)(int, char **);
+
+typedef struct {
+    char *nom;
+    TypeCommande fonction;
+} CommandeInterne;
+
+static CommandeInterne TabComInt[NBMAXC];
+static int NbComInt;
+
+char *copyString(char *s)
+{
+    char *copie;
+    size_t taille;
+
+    taille = strlen(s) + 1;
+    copie = malloc(taille);
+    if (copie == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    strcpy(copie, s);
+    return copie;
+}
+
+void libereAnalyse(void)
+{
+    int i;
+
+    for (i = 0; i < NMots; i++) {
+        free(Mots[i]);
+    }
+
+    free(Mots);
+    Mots = NULL;
+    NMots = 0;
+}
+
+int analyseCom(char *b)
+{
+    char *travail;
+    char *courant;
+    char *mot;
+    char **nouveau;
+
+    libereAnalyse();
+
+    travail = copyString(b);
+    courant = travail;
+
+    while ((mot = strsep(&courant, " \t\n")) != NULL) {
+        if (*mot == '\0') {
+            continue;
+        }
+
+        nouveau = realloc(Mots, (NMots + 2) * sizeof(char *));
+        if (nouveau == NULL) {
+            perror("realloc");
+            free(travail);
+            exit(EXIT_FAILURE);
+        }
+
+        Mots = nouveau;
+        Mots[NMots] = copyString(mot);
+        NMots++;
+        Mots[NMots] = NULL;
+    }
+
+    free(travail);
+    return NMots;
+}
+
+void ajouteCom(char *nom, TypeCommande fonction)
+{
+    if (NbComInt >= NBMAXC) {
+        fprintf(stderr, "Trop de commandes internes\n");
+        exit(EXIT_FAILURE);
+    }
+
+    TabComInt[NbComInt].nom = nom;
+    TabComInt[NbComInt].fonction = fonction;
+    NbComInt++;
+}
+
+int Sortie(int N, char **P)
+{
+    (void)N;
+    (void)P;
+    exit(0);
+}
+
+void majComInt(void)
+{
+    ajouteCom("exit", Sortie);
+}
+
+int execComInt(void)
+{
+    int i;
+
+    if (NMots == 0) {
+        return 0;
+    }
+
+    for (i = 0; i < NbComInt; i++) {
+        if (strcmp(Mots[0], TabComInt[i].nom) == 0) {
+            TabComInt[i].fonction(NMots, Mots);
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int execComExt(void)
+{
+    pid_t pid;
+    int status;
+
+    pid = fork();
+
+    if (pid < 0) {
+        perror("fork");
+        return -1;
+    }
+
+    if (pid == 0) {
+        execvp(Mots[0], Mots);
+        perror(Mots[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    if (waitpid(pid, &status, 0) < 0) {
+        perror("waitpid");
+        return -1;
+    }
+
+    return 0;
+}
+
+char *fabrique_prompt(void)
+{
+    char *user;
+    char hostname[HOST_NAME_MAX + 1];
+    char *prompt;
+    char fin_prompt;
+    size_t taille;
+
+    user = getenv("USER");
+    if (user == NULL) {
+        user = "user";
+    }
+
+    if (gethostname(hostname, sizeof(hostname)) != 0) {
+        strcpy(hostname, "machine");
+    }
+    hostname[sizeof(hostname) - 1] = '\0';
+
+    if (geteuid() == 0) {
+        fin_prompt = '#';
+    } else {
+        fin_prompt = '$';
+    }
+
+    taille = strlen(user) + strlen(hostname) + 4;
+    prompt = malloc(taille);
+    if (prompt == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    snprintf(prompt, taille, "%s@%s%c ", user, hostname, fin_prompt);
+    return prompt;
+}
+
+int main(void)
+{
+    char *ligne;
+    char *prompt;
+
+    Mots = NULL;
+    NMots = 0;
+    NbComInt = 0;
+    majComInt();
+
+    while (1) {
+        prompt = fabrique_prompt();
+        ligne = readline(prompt);
+        free(prompt);
+
+        if (ligne == NULL) {
+            putchar('\n');
+            break;
+        }
+
+        if (analyseCom(ligne)) {
+            if (!execComInt()) {
+                execComExt();
+            }
+        }
+
+        free(ligne);
+    }
+
+    libereAnalyse();
+    return 0;
+}
